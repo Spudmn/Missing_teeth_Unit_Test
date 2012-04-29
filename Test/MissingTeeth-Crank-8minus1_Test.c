@@ -86,7 +86,7 @@ void Mock_Set_Sync_Level(unsigned char SYNC_LEVEL)
 
   UNITY_OUTPUT_CHAR('\n');
 
-  KeyUserDebugs.decoderFlags |= SYNC_LEVEL;                         \
+  KeyUserDebugs.decoderFlags |= SYNC_LEVEL;
   KeyUserDebugs.syncCaughtOnThisEvent = KeyUserDebugs.currentEvent;
 
 }
@@ -133,7 +133,10 @@ const unsigned char numberOfRealEvents = NUMBER_OF_REAL_EVENTS;  // This needs t
 /////////////////////////////////////////////////////////////////////
 ////  Helper Functions
 
-
+//////////////////////////////////////////////////////////////////////////////////////
+//Normally you would not display this information on the console.
+//You would use the TEST_ASSERT macros to test that the results were as expected.
+//I did it this way because I was trying to debug what was happening.
 
 void Show_Number(unsigned char Num)
 {
@@ -153,12 +156,13 @@ void Show_Peroid(void)
 	UNITY_OUTPUT_CHAR(' ');
 	if ((KeyUserDebugs.decoderFlags & CRANK_SYNC)) UnityPrint(" Crank Sync ");
 	UnityPrint(" KeyUserDebugs.currentEvent ");
-	UnityPrintNumber(	KeyUserDebugs.currentEvent);
+	UnityPrintNumber(KeyUserDebugs.currentEvent);
 
 	UNITY_OUTPUT_CHAR('\n');
 	UNITY_OUTPUT_CHAR('\n');
 
 }
+
 
 void Do_One_Rev(void)
 {
@@ -198,12 +202,12 @@ void Do_One_Rev(void)
 	PrimaryRPMISR(); //T7
 	Show_Peroid();
 
+	TEST_ASSERT(KeyUserDebugs.decoderFlags & CRANK_SYNC);
 
 	 // Show_Number(8);
 	  TC0 += 100;
 	  //PrimaryRPMISR(); //T8 missing
 	  //Show_Peroid();
-
 }
 
 
@@ -245,6 +249,7 @@ TEST(MissingTeeth, ISR)  // This is the Test
   decoderInitPreliminary();
   TEST_ASSERT_EQUAL(TCTL4,0x02);
   TC0 = 100;
+
   Do_One_Rev();
   Do_One_Rev();
   Do_One_Rev();
@@ -253,7 +258,7 @@ TEST(MissingTeeth, ISR)  // This is the Test
 
 
 
-TEST(MissingTeeth, Flat_Battery)  // This is the Test of real world number of a Mini cranked with a flat Battery
+TEST(MissingTeeth, Flat_Battery)  // This is the Test of real world numbers of a Mini cranked with a flat Battery
 {
   decoderInitPreliminary();
   TEST_ASSERT_EQUAL(TCTL4,0x02);

@@ -17,11 +17,10 @@
         You should have received a copy of the GNU General Public License
         along with any FreeEMS software.  If not, see http://www.gnu.org/licenses/
 
-
  */
 
-#include "unity//unity_fixture.h"
 
+#include "unity//unity_fixture.h"
 
 TEST_GROUP_RUNNER(MissingTeeth)
 {

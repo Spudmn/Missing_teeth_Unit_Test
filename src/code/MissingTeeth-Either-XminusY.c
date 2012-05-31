@@ -178,17 +178,17 @@ void PrimaryRPMISR(void) {
 							KeyUserDebugs.currentEvent = 0;
 						}
 
-						if((KeyUserDebugs.currentEvent == 0) && (matches.pattern != MatchedPairNarrowWide)){ // First event after gap
-							resetToNonRunningState(matches.pattern + MaskBySumPattern);
-						}else if((KeyUserDebugs.currentEvent == 1) && (matches.pattern != NarrowWideWideNarrow)){ // Second event after gap
-							resetToNonRunningState(matches.pattern + MaskBySumPattern);
-						}else if((KeyUserDebugs.currentEvent == 2) && (matches.pattern != WideNarrowMatchedPair)){ // Third event after gap
-							resetToNonRunningState(matches.pattern + MaskBySumPattern);
-						}else if((KeyUserDebugs.currentEvent > 2) && (matches.pattern != MatchedPairMatchedPair)){ // All other events should be preceeded by two matched pairs
-							resetToNonRunningState(matches.pattern + MaskBySumPattern);
+						if((KeyUserDebugs.currentEvent == 0) && (READ_UNION_8(matches.pattern) != MatchedPairNarrowWide)){ // First event after gap
+							resetToNonRunningState(READ_UNION_8(matches.pattern) + MaskBySumPattern);
+						}else if((KeyUserDebugs.currentEvent == 1) && (READ_UNION_8(matches.pattern) != NarrowWideWideNarrow)){ // Second event after gap
+							resetToNonRunningState(READ_UNION_8(matches.pattern) + MaskBySumPattern);
+						}else if((KeyUserDebugs.currentEvent == 2) && (READ_UNION_8(matches.pattern) != WideNarrowMatchedPair)){ // Third event after gap
+							resetToNonRunningState(READ_UNION_8(matches.pattern) + MaskBySumPattern);
+						}else if((KeyUserDebugs.currentEvent > 2) && (READ_UNION_8(matches.pattern) != MatchedPairMatchedPair)){ // All other events should be preceeded by two matched pairs
+							resetToNonRunningState(READ_UNION_8(matches.pattern) + MaskBySumPattern);
 						} // else carry on happily as always
 					}else{
-						if(matches.pattern == MatchedPairMatchedPair){      //         | small | small | small | - All periods match, could be anywhere, unless...
+						if(READ_UNION_8(matches.pattern) == MatchedPairMatchedPair){      //         | small | small | small | - All periods match, could be anywhere, unless...
 							NumberOfTwinMatchedPairs++;
 							// Because this method REQUIRES 4 evenly spaced teeth to work, it's only available to 5-1 or greater wheels.
 							if((NUMBER_OF_WHEEL_EVENTS > 3) && (NumberOfTwinMatchedPairs == (NUMBER_OF_WHEEL_EVENTS - 3))){ // This can't find a match until it's on it's fourth execution
@@ -205,20 +205,20 @@ void PrimaryRPMISR(void) {
 							}else if((NUMBER_OF_WHEEL_EVENTS > 3) && (NumberOfTwinMatchedPairs > (NUMBER_OF_WHEEL_EVENTS - 3))){ // More matched pairs than possible with config
 								resetToNonRunningState(yourSyncToleranceIsLooserThanAWellYouGetTheIdea);
 							} // else fall through to wait.
-						}else if(matches.pattern == MatchedPairNarrowWide){ // | small | small |      BIG      | Last tooth is first tooth after missing  - ((M-N)-3)/M = common
+						}else if(READ_UNION_8(matches.pattern) == MatchedPairNarrowWide){ // | small | small |      BIG      | Last tooth is first tooth after missing  - ((M-N)-3)/M = common
 							KeyUserDebugs.currentEvent = 0;
 							lastEvent = NUMBER_OF_WHEEL_EVENTS - 1; // Zero indexed
 							SET_SYNC_LEVEL_TO(CRANK_SYNC);
-						}else if(matches.pattern == NarrowWideWideNarrow){  // | small |      BIG      | small | Last tooth is second tooth after missing - 1/M
+						}else if(READ_UNION_8(matches.pattern) == NarrowWideWideNarrow){  // | small |      BIG      | small | Last tooth is second tooth after missing - 1/M
 							KeyUserDebugs.currentEvent = 1;
 							lastEvent = 0;
 							SET_SYNC_LEVEL_TO(CRANK_SYNC);
-						}else if(matches.pattern == WideNarrowMatchedPair){ // |      BIG      | small | small | Last tooth is third tooth after missing  - 1/M
+						}else if(READ_UNION_8(matches.pattern) == WideNarrowMatchedPair){ // |      BIG      | small | small | Last tooth is third tooth after missing  - 1/M
 							KeyUserDebugs.currentEvent = 2;
 							lastEvent = 1;
 							SET_SYNC_LEVEL_TO(CRANK_SYNC);
 						}else{
-							resetToNonRunningState(matches.pattern); // Where they are defined individually in the error file! Beautiful!!
+							resetToNonRunningState(READ_UNION_8(matches.pattern)); // Where they are defined individually in the error file! Beautiful!!
 						}
 					}
 				}

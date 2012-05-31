@@ -23,6 +23,26 @@
 #ifndef GLOBAL_H_
 #define GLOBAL_H_
 
+
+
+
+#if(__BYTE_ORDER__)&&(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
+// PC Unit Testing
+#elif (MC6811)
+#define BIG_ENDIAN
+#else
+#error Unknown Byte Order
+#endif
+
+
+#if BIG_ENDIAN
+   #define READ_UNION_8(x) (x)
+#else
+  #define READ_UNION_8(x) ((((x) & 0xF0) >> 4) | (((x) & 0x0F) << 4))
+#endif
+
+
+
 #define SBIT(name, addr, bit)  volatile unsigned char  name
 #define SFR(name)        volatile unsigned char  name
 #define SFR16(name)      volatile unsigned short name

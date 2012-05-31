@@ -49,7 +49,7 @@
  * @note Please see the docs directory MissingTeethValidCombos.ods file first.
  */
 
-#ifndef UNIT_TEST
+
 typedef struct {
 	unsigned lastPair: 4;
 	unsigned thisPair: 4;
@@ -59,19 +59,6 @@ typedef union {
 	twoPairs pairs;
 	unsigned char pattern;
 } match;
-#else
-
-typedef struct {
-        unsigned thisPair: 4;
-        unsigned lastPair: 4;
-} twoPairs;
-
-typedef union {
-        twoPairs pairs;
-        unsigned char pattern;
-} match;
-
-#endif
 
 #define DECODER_MAX_CODE_TIME 250 // From Spudmn's measurements in NZ. 171us runtime was max = 214 ticks.
 
